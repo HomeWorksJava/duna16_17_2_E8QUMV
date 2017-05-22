@@ -9,6 +9,7 @@ import hu.obde.pizzaapi.datamodell.Admin;
 import hu.obde.pizzaapi.resources.api.AdminService;
 import hu.obde.pizzaapi.services.GenericDaoService;
 import hu.obde.pizzaapi.services.SHA256;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.enterprise.context.RequestScoped;
@@ -39,6 +40,7 @@ public class AdminServiceImpl implements AdminService {
     
     @POST
     @Path("hozzaad")
+    @Produces(MediaType.APPLICATION_JSON)
     @Override
     public String insertAdmin(
             @FormParam("username")String username, 
@@ -47,23 +49,24 @@ public class AdminServiceImpl implements AdminService {
             @FormParam("level")String level) 
     {
         Admin admin = new Admin();
+        JSONObject returnJsonObj = new JSONObject();
         
         try
         {
          admin.setUsername(username);
          admin.setPassword(SHA256.generateHash(password));
          admin.setEmail(email);
-         admin.setLevel(Integer.parseInt(level));        
-            
+         admin.setLevel(Integer.parseInt(level));
          gds.save(admin);
-        }
+         returnJsonObj.put("success", "Felhasználó sikeresen hozzáadva ("+ username +")");
+        }     
         catch(Exception ex)
         {
-            return "error";
+            returnJsonObj.put("error", "Hiba a felhasználó hozzáadása közben!");
         }
         
         
-        return "ok";
+        return returnJsonObj.toString();
     }
     
     

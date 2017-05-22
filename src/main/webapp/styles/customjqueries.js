@@ -35,12 +35,12 @@
                         {
                             if($('#perrormsg').hasClass("label-danger"))
                                 $('#perrormsg').removeClass("label-danger").addClass("label-success");
-                        
-                                   document.getElementById("pizzaform").reset();
-                                   loadPizzas("../rest/pizza/osszes", "nev", "pizzak_table");
-                        
-                        
+                            
+                            clearNodeById("pizzak_table");
+                            document.getElementById("pizzaform").reset();                                   
+                            loadPizzas("../rest/pizza/osszes", "nev", "pizzak_table"); 
                             $('#perrormsg').fadeIn(1000).text(data.success).delay(2000).fadeOut(1000);
+                            
                         }
                         if(data.hasOwnProperty("error"))
                         {

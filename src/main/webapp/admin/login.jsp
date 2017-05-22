@@ -39,7 +39,7 @@
 	</div>
         <div class="row ">
         <div class="col-md-6 col-md-offset-3">
-        	<div class="panel panel-warning" style="margin-top:200px;">
+        	<div class="panel panel-warning" style="margin-top:50px;">
 			  	<div class="panel-heading">
                                     <h3 class="panel-title">Felhasználó hozzáadása <span id="adderrormsg" class="pull-right label label-danger"></span></h3> 
 			 	</div>
@@ -56,7 +56,7 @@
 			    			<input class="form-control" placeholder="Email" name="email" type="text" >
 			    		</div>
                                         <input type="hidden" name="level" value="9">
-			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Belépés">
+			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Hozzáadás">
 			    	</fieldset>
 			      	</form>
 			    </div>
@@ -74,7 +74,7 @@
                        data: $("#adminlogin").serialize(), 
                        success: function(data)
                        {
-                        if(!data.hasOwnProperty("error"))
+                        if(data.hasOwnProperty("admin"))
                         {
                             document.cookie = "username="+data.admin.username;
                             console.log("Sikeres bejelentkezés!");
@@ -99,12 +99,19 @@
                        data: $("#adminadd").serialize(), 
                        success: function(data)
                        {
-                        if(!data.hasOwnProperty("error"))
+                        if(data.hasOwnProperty("success"))
                         {
+                            if($('#adderrormsg').hasClass("label-danger"))
+                                $('#adderrormsg').removeClass("label-danger").addClass("label-success");
+                            
                             $('#adderrormsg').fadeIn(1000).text(data.success).delay(2000).fadeOut(1000);
+                            document.getElementById("adminadd").reset();
                         }
                         if(data.hasOwnProperty("error"))
                         {
+                            if($('#adderrormsg').hasClass("label-success"))
+                                $('#adderrormsg').removeClass("label-success").addClass("label-danger");
+                            
                             $('#adderrormsg').fadeIn(1000).text(data.error).delay(2000).fadeOut(1000);
                         }
                        }
